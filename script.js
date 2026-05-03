@@ -1,40 +1,96 @@
-// твой код (оставляем как есть)
+// === REVEAL ANIMATION ===
 const reveals = document.querySelectorAll('.reveal');
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) entry.target.classList.add('visible');
   });
 }, { threshold: 0.12 });
+
 reveals.forEach((el) => observer.observe(el));
 
 
-// === ДОБАВЬ ВОТ ЭТО НИЖЕ ===
+// === IMAGE MODAL (КРАСИВАЯ ГАЛЕРЕЯ) ===
 
-// элементы модалки
 const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
 const closeModal = document.querySelector('.image-modal-close');
 
-// клик по картинкам
-document.querySelectorAll('.gallery-img').forEach(img => {
-  img.addEventListener('click', () => {
-    imageModal.style.display = 'flex';
-    modalImage.src = img.src;
-    modalImage.alt = img.alt;
-    document.body.style.overflow = 'hidden';
-  });
-});
+const galleryImages = Array.from(document.querySelectorAll('.gallery-img'));
 
-// закрытие по крестику
-closeModal.addEventListener('click', () => {
+let currentIndex = 0;
+
+// открыть
+function openModal(index) {
+  currentIndex = index;
+  updateImage();
+
+  imageModal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+// закрыть
+function closeImageModal() {
   imageModal.style.display = 'none';
   document.body.style.overflow = '';
+}
+
+// обновить картинку
+function updateImage() {
+  const img = galleryImages[currentIndex];
+  modalImage.src = img.src;
+  modalImage.alt = img.alt;
+}
+
+// следующий
+function nextImage() {
+  currentIndex = (currentIndex + 1) % galleryImages.length;
+  updateImage();
+}
+
+// предыдущий
+function prevImage() {
+  currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+  updateImage();
+}
+
+// клик по картинке
+galleryImages.forEach((img, index) => {
+  img.addEventListener('click', () => openModal(index));
 });
 
-// закрытие по фону
+// закрытие
+closeModal.addEventListener('click', closeImageModal);
+
+// клик вне картинки
 imageModal.addEventListener('click', (e) => {
-  if (e.target === imageModal) {
-    imageModal.style.display = 'none';
-    document.body.style.overflow = '';
+  if (e.target === imageModal) closeImageModal();
+});
+
+// клавиатура
+document.addEventListener('keydown', (e) => {
+  if (imageModal.style.display !== 'flex') return;
+
+  if (e.key === 'Escape') closeImageModal();
+  if (e.key === 'ArrowRight') nextImage();
+  if (e.key === 'ArrowLeft') prevImage();
+});
+
+
+// === SWIPE (МОБИЛКА) ===
+
+let startX = 0;
+
+imageModal.addEventListener('touchstart', (e) => {
+  startX = e.touches[0].clientX;
+});
+
+imageModal.addEventListener('touchend', (e) => {
+  let endX = e.changedTouches[0].clientX;
+
+  if (startX - endX > 50) {
+    nextImage(); // свайп влево
+  } else if (endX - startX > 50) {
+    prevImage(); // свайп вправо
   }
 });
