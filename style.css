@@ -370,170 +370,148 @@ p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.72; }
   100% { left: 125%; }
 }
 
-/* === NICE IMAGE MODAL / GALLERY LIGHTBOX === */
+
+/* === WORKING IMAGE LIGHTBOX === */
 .gallery-img {
   cursor: zoom-in;
-  transition: transform .28s ease, filter .28s ease;
+  transition: transform .25s ease, filter .25s ease;
 }
 
 .gallery-card:hover .gallery-img {
-  transform: scale(1.035);
-  filter: brightness(.96) saturate(1.03);
+  transform: scale(1.025);
+  filter: brightness(.96);
 }
 
 .image-modal {
   display: none;
   position: fixed;
   inset: 0;
-  z-index: 99999;
-  background: rgba(20, 16, 14, 0.88);
-  backdrop-filter: blur(12px);
-  justify-content: center;
+  z-index: 999999;
+  background: rgba(18, 14, 12, .92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   align-items: center;
-  padding: 22px;
-  opacity: 0;
-  transition: opacity .25s ease;
+  justify-content: center;
+  padding: 18px;
 }
 
-.image-modal.active {
-  opacity: 1;
+.image-modal.is-open {
+  display: flex;
 }
 
 .image-modal-box {
   position: relative;
-  max-width: min(92vw, 920px);
-  max-height: 88vh;
-  animation: modalZoom .28s ease;
-}
-
-.image-modal-content {
-  display: block;
-  max-width: 100%;
+  z-index: 2;
+  width: auto;
+  max-width: 92vw;
   max-height: 84vh;
-  object-fit: contain;
-  border-radius: 24px;
-  box-shadow: 0 34px 90px rgba(0,0,0,0.48);
-  background: #fffaf6;
-}
-
-.image-modal-close,
-.image-modal-arrow {
-  border: 1px solid rgba(255,255,255,0.22);
-  cursor: pointer;
-  color: #fff;
-  background: rgba(255,255,255,0.14);
-  backdrop-filter: blur(14px);
-  transition: transform .2s ease, background .2s ease, border-color .2s ease;
-}
-
-.image-modal-close {
-  position: fixed;
-  top: 18px;
-  right: 22px;
-  width: 48px;
-  height: 48px;
-  border-radius: 999px;
-  font-size: 34px;
-  line-height: 1;
-  z-index: 100000;
-}
-
-.image-modal-arrow {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
-  font-size: 48px;
-  line-height: 1;
-  z-index: 100000;
-}
-
-.image-modal-prev { left: 22px; }
-.image-modal-next { right: 22px; }
-
-.image-modal-close:hover,
-.image-modal-arrow:hover {
-  background: rgba(255,255,255,0.25);
-  border-color: rgba(255,255,255,0.36);
-}
-
-.image-modal-prev:hover { transform: translateY(-50%) translateX(-2px); }
-.image-modal-next:hover { transform: translateY(-50%) translateX(2px); }
-.image-modal-close:hover { transform: rotate(90deg); }
-
-.image-modal-counter {
-  position: absolute;
-  left: 50%;
-  bottom: -46px;
-  transform: translateX(-50%);
-  color: white;
-  font-size: 14px;
-  font-weight: 800;
-  padding: 8px 15px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.14);
-  border: 1px solid rgba(255,255,255,0.18);
-  backdrop-filter: blur(12px);
-}
-
-@keyframes modalZoom {
-  from { transform: scale(.94); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-@media (max-width: 767px) {
-  .image-modal { padding: 14px; }
-  .image-modal-content { max-height: 78vh; border-radius: 18px; }
-  .image-modal-arrow {
-    width: 44px;
-    height: 44px;
-    font-size: 38px;
-    background: rgba(0,0,0,0.28);
-  }
-  .image-modal-prev { left: 10px; }
-  .image-modal-next { right: 10px; }
-  .image-modal-close {
-    top: 12px;
-    right: 12px;
-    width: 44px;
-    height: 44px;
-  }
-  .image-modal-counter { bottom: -42px; }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lightboxIn .22s ease both;
 }
 
 .image-modal .image-modal-content {
   display: block !important;
   width: auto !important;
   height: auto !important;
+  min-width: 0 !important;
   min-height: 0 !important;
   max-width: 92vw !important;
   max-height: 82vh !important;
   object-fit: contain !important;
   border-radius: 18px;
   background: #fff;
-  z-index: 100001;
+  box-shadow: 0 30px 90px rgba(0,0,0,.55);
 }
 
-.image-modal {
-  display: none;
+.image-modal-close,
+.image-modal-arrow {
   position: fixed;
-  inset: 0;
-  z-index: 99999;
-  background: rgba(0, 0, 0, 0.88);
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
+  z-index: 3;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.16);
+  color: #fff;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  touch-action: manipulation;
 }
 
 .image-modal-close {
-  position: fixed;
   top: 14px;
-  right: 18px;
+  right: 14px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  font-size: 34px;
+  line-height: 40px;
+}
+
+.image-modal-arrow {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 44px;
+  line-height: 44px;
+}
+
+.image-modal-prev { left: 16px; }
+.image-modal-next { right: 16px; }
+
+.image-modal-counter {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 3;
   color: #fff;
-  font-size: 42px;
-  line-height: 1;
-  cursor: pointer;
-  z-index: 100002;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@keyframes lightboxIn {
+  from { opacity: 0; transform: scale(.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 767px) {
+  .image-modal { padding: 10px; }
+
+  .image-modal .image-modal-content {
+    max-width: 94vw !important;
+    max-height: 78vh !important;
+    border-radius: 16px;
+  }
+
+  .image-modal-arrow {
+    width: 42px;
+    height: 42px;
+    font-size: 36px;
+    line-height: 34px;
+    background: rgba(0,0,0,.32);
+  }
+
+  .image-modal-prev { left: 8px; }
+  .image-modal-next { right: 8px; }
+
+  .image-modal-close {
+    top: 10px;
+    right: 10px;
+    width: 42px;
+    height: 42px;
+    font-size: 32px;
+    line-height: 36px;
+    background: rgba(0,0,0,.32);
+  }
+
+  .image-modal-counter { bottom: 12px; }
 }
