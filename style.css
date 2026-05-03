@@ -312,35 +312,193 @@ p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.72; }
   .certificates-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* === IMAGE MODAL === */
+
+/* === BEAUTY POLISH === */
+.topbar,
+.soft-card,
+.trust-card,
+.glass-card,
+.result-card,
+.pricing-card,
+.gallery-card,
+.pricing-includes,
+.payment-box {
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.soft-card:hover,
+.trust-card:hover,
+.program-item:hover,
+.gallery-card:hover,
+.pricing-includes:hover,
+.payment-box:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 70px rgba(104, 78, 61, 0.16);
+  border-color: rgba(255,255,255,0.98);
+}
+
+.btn,
+.topbar-link,
+.mobile-cta {
+  transition: transform .22s ease, box-shadow .22s ease, filter .22s ease;
+}
+
+.btn:hover,
+.topbar-link:hover,
+.mobile-cta:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.02);
+}
+
+.price-badge {
+  position: relative;
+  overflow: hidden;
+}
+
+.price-badge::after {
+  content: "";
+  position: absolute;
+  inset: -40% auto -40% -60%;
+  width: 46%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
+  transform: rotate(18deg);
+  animation: shine 4s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0%, 55% { left: -60%; }
+  100% { left: 125%; }
+}
+
+/* === NICE IMAGE MODAL / GALLERY LIGHTBOX === */
 .gallery-img {
-  cursor: pointer;
+  cursor: zoom-in;
+  transition: transform .28s ease, filter .28s ease;
+}
+
+.gallery-card:hover .gallery-img {
+  transform: scale(1.035);
+  filter: brightness(.96) saturate(1.03);
 }
 
 .image-modal {
   display: none;
   position: fixed;
-  z-index: 99999;
   inset: 0;
-  background: rgba(0, 0, 0, 0.88);
+  z-index: 99999;
+  background: rgba(20, 16, 14, 0.88);
+  backdrop-filter: blur(12px);
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 22px;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+.image-modal.active {
+  opacity: 1;
+}
+
+.image-modal-box {
+  position: relative;
+  max-width: min(92vw, 920px);
+  max-height: 88vh;
+  animation: modalZoom .28s ease;
 }
 
 .image-modal-content {
-  max-width: 95%;
-  max-height: 90vh;
-  border-radius: 16px;
+  display: block;
+  max-width: 100%;
+  max-height: 84vh;
   object-fit: contain;
+  border-radius: 24px;
+  box-shadow: 0 34px 90px rgba(0,0,0,0.48);
+  background: #fffaf6;
+}
+
+.image-modal-close,
+.image-modal-arrow {
+  border: 1px solid rgba(255,255,255,0.22);
+  cursor: pointer;
+  color: #fff;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(14px);
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
 }
 
 .image-modal-close {
   position: fixed;
   top: 18px;
-  right: 28px;
-  color: #fff;
-  font-size: 42px;
-  cursor: pointer;
+  right: 22px;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  font-size: 34px;
+  line-height: 1;
   z-index: 100000;
+}
+
+.image-modal-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  font-size: 48px;
+  line-height: 1;
+  z-index: 100000;
+}
+
+.image-modal-prev { left: 22px; }
+.image-modal-next { right: 22px; }
+
+.image-modal-close:hover,
+.image-modal-arrow:hover {
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.36);
+}
+
+.image-modal-prev:hover { transform: translateY(-50%) translateX(-2px); }
+.image-modal-next:hover { transform: translateY(-50%) translateX(2px); }
+.image-modal-close:hover { transform: rotate(90deg); }
+
+.image-modal-counter {
+  position: absolute;
+  left: 50%;
+  bottom: -46px;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 8px 15px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+}
+
+@keyframes modalZoom {
+  from { transform: scale(.94); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 767px) {
+  .image-modal { padding: 14px; }
+  .image-modal-content { max-height: 78vh; border-radius: 18px; }
+  .image-modal-arrow {
+    width: 44px;
+    height: 44px;
+    font-size: 38px;
+    background: rgba(0,0,0,0.28);
+  }
+  .image-modal-prev { left: 10px; }
+  .image-modal-next { right: 10px; }
+  .image-modal-close {
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+  }
+  .image-modal-counter { bottom: -42px; }
 }
