@@ -21,12 +21,11 @@ const galleryImages = Array.from(document.querySelectorAll('.gallery-img'));
 let currentIndex = 0;
 
 // открыть
-function openModal(index) {
-  currentIndex = index;
-  updateImage();
+function updateImage() {
+  const img = galleryImages[currentIndex];
+  if (!img) return;
 
-  imageModal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+  modalImage.src = img.src;
 }
 
 // закрыть
