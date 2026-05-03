@@ -10,35 +10,52 @@ const observer = new IntersectionObserver((entries) => {
 reveals.forEach((el) => observer.observe(el));
 
 
-// === IMAGE MODAL (КРАСИВАЯ ГАЛЕРЕЯ) ===
+// === IMAGE MODAL ===
 
 const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
 const closeModal = document.querySelector('.image-modal-close');
+const nextBtn = document.querySelector('.image-modal-next');
+const prevBtn = document.querySelector('.image-modal-prev');
+const modalCounter = document.getElementById('modalCounter');
 
 const galleryImages = Array.from(document.querySelectorAll('.gallery-img'));
 
 let currentIndex = 0;
+let startX = 0;
 
-// открыть
-function updateImage() {
-  const img = galleryImages[currentIndex];
-  if (!img) return;
+// открыть модалку
+function openModal(index) {
+  currentIndex = index;
+  updateImage();
 
-  modalImage.src = img.src;
+  imageModal.style.display = 'flex';
+  setTimeout(() => imageModal.classList.add('active'), 10);
+
+  document.body.style.overflow = 'hidden';
 }
 
 // закрыть
 function closeImageModal() {
-  imageModal.style.display = 'none';
-  document.body.style.overflow = '';
+  imageModal.classList.remove('active');
+
+  setTimeout(() => {
+    imageModal.style.display = 'none';
+    document.body.style.overflow = '';
+  }, 200);
 }
 
 // обновить картинку
 function updateImage() {
   const img = galleryImages[currentIndex];
+  if (!img) return;
+
   modalImage.src = img.src;
-  modalImage.alt = img.alt;
+  modalImage.alt = img.alt || '';
+
+  if (modalCounter) {
+    modalCounter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
+  }
 }
 
 // следующий
@@ -53,43 +70,46 @@ function prevImage() {
   updateImage();
 }
 
-// клик по картинке
+// клики по картинкам
 galleryImages.forEach((img, index) => {
   img.addEventListener('click', () => openModal(index));
 });
 
 // закрытие
-closeModal.addEventListener('click', closeImageModal);
+if (closeModal) {
+  closeModal.addEventListener('click', closeImageModal);
+}
 
-// клик вне картинки
-imageModal.addEventListener('click', (e) => {
-  if (e.target === imageModal) closeImageModal();
-});
+// стрелки
+if (nextBtn) nextBtn.addEventListener('click', nextImage);
+if (prevBtn) prevBtn.addEventListener('click', prevImage);
+
+// клик по фону
+if (imageModal) {
+  imageModal.addEventListener('click', (e) => {
+    if (e.target === imageModal) closeImageModal();
+  });
+}
 
 // клавиатура
 document.addEventListener('keydown', (e) => {
-  if (imageModal.style.display !== 'flex') return;
+  if (!imageModal || imageModal.style.display !== 'flex') return;
 
   if (e.key === 'Escape') closeImageModal();
   if (e.key === 'ArrowRight') nextImage();
   if (e.key === 'ArrowLeft') prevImage();
 });
 
+// свайп (телефон)
+if (imageModal) {
+  imageModal.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+  });
 
-// === SWIPE (МОБИЛКА) ===
+  imageModal.addEventListener('touchend', (e) => {
+    const endX = e.changedTouches[0].clientX;
 
-let startX = 0;
-
-imageModal.addEventListener('touchstart', (e) => {
-  startX = e.touches[0].clientX;
-});
-
-imageModal.addEventListener('touchend', (e) => {
-  let endX = e.changedTouches[0].clientX;
-
-  if (startX - endX > 50) {
-    nextImage(); // свайп влево
-  } else if (endX - startX > 50) {
-    prevImage(); // свайп вправо
-  }
-});
+    if (startX - endX > 50) nextImage();
+    if (endX - startX > 50) prevImage();
+  });
+}
