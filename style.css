@@ -165,6 +165,7 @@ p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.72; }
 
 /* Mobile horizontal galleries */
 @media (max-width: 767px) {
+
   .gallery-grid,
   .certificates-grid {
     display: flex !important;
@@ -196,46 +197,45 @@ p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.72; }
   }
 
   .gallery-card {
-    flex: 0 0 82%;
+    flex: 0 0 70%;
     scroll-snap-align: center;
   }
 
   .gallery-card img {
-    min-height: auto;
+    width: 100%;
     height: auto;
-    max-height: 520px;
-    object-fit: cover;
+    max-height: none;
+    object-fit: contain;
+    border-radius: 20px;
   }
 
   #menu-examples .gallery-card,
   #client-results .gallery-card,
   #coach-results .gallery-card {
-    flex-basis: 82%;
+    flex-basis: 70%;
   }
 
   #menu-examples .gallery-card img,
   #client-results .gallery-card img,
   #coach-results .gallery-card img {
-    aspect-ratio: 4 / 5;
     width: 100%;
     height: auto;
+    object-fit: contain;
   }
 
   #certificates .gallery-card {
-    flex-basis: 86%;
+    flex-basis: 80%;
   }
 
   #certificates .certificate-portrait img {
-    aspect-ratio: 3 / 4.2;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   #certificates .certificate-landscape {
-    flex-basis: 88%;
+    flex-basis: 85%;
   }
 
   #certificates .certificate-landscape img {
-    aspect-ratio: 16 / 10;
     object-fit: contain;
     background: #fff;
   }
@@ -254,4 +254,5 @@ p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.72; }
     font-weight: 700;
     opacity: 0.55;
   }
+
 }
